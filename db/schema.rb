@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_08_174626) do
+ActiveRecord::Schema.define(version: 2021_04_11_172759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,10 +67,15 @@ ActiveRecord::Schema.define(version: 2021_04_08_174626) do
     t.string "name"
     t.string "material"
     t.text "status"
-    t.decimal "xaxis"
-    t.decimal "yaxis"
+    t.integer "xaxis"
+    t.integer "yaxis"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "winery_id", null: false
+    t.integer "volume"
+    t.integer "width"
+    t.integer "height"
+    t.index ["winery_id"], name: "index_tanks_on_winery_id"
   end
 
   create_table "wineries", force: :cascade do |t|
@@ -81,5 +86,6 @@ ActiveRecord::Schema.define(version: 2021_04_08_174626) do
     t.index ["owner_id"], name: "index_wineries_on_owner_id"
   end
 
+  add_foreign_key "tanks", "wineries"
   add_foreign_key "wineries", "owners"
 end
