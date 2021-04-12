@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_11_172759) do
+ActiveRecord::Schema.define(version: 2021_04_12_165742) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,16 @@ ActiveRecord::Schema.define(version: 2021_04_11_172759) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "lot_tanks", force: :cascade do |t|
+    t.bigint "lot_id", null: false
+    t.bigint "tank_id", null: false
+    t.integer "volume"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["lot_id"], name: "index_lot_tanks_on_lot_id"
+    t.index ["tank_id"], name: "index_lot_tanks_on_tank_id"
+  end
+
   create_table "lots", force: :cascade do |t|
     t.string "name"
     t.integer "volume"
@@ -53,6 +63,8 @@ ActiveRecord::Schema.define(version: 2021_04_11_172759) do
     t.string "color"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "owner_id", null: false
+    t.index ["owner_id"], name: "index_lots_on_owner_id"
   end
 
   create_table "owners", force: :cascade do |t|
@@ -86,6 +98,9 @@ ActiveRecord::Schema.define(version: 2021_04_11_172759) do
     t.index ["owner_id"], name: "index_wineries_on_owner_id"
   end
 
+  add_foreign_key "lot_tanks", "lots"
+  add_foreign_key "lot_tanks", "tanks"
+  add_foreign_key "lots", "owners"
   add_foreign_key "tanks", "wineries"
   add_foreign_key "wineries", "owners"
 end

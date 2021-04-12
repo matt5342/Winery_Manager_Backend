@@ -1,4 +1,5 @@
 class Lot < ApplicationRecord
-    has_many :tanks
-    belongs_to :winery
+    has_many :lot_tanks
+    has_many :tanks, through: :lot_tanks
+    belongs_to :owner
 end

@@ -4,4 +4,5 @@ class Owner < ApplicationRecord
     # validates :email, uniqueness: { case_sensitive: false, "Email already in use. Please choose a different email" } 
     has_many :wineries
     has_many :employees
+    has_many :lots
 end
