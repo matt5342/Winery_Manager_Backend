@@ -1,4 +1,4 @@
-class Winery < ApplicationRecord
+class Section < ApplicationRecord
     belongs_to :owner
     has_many :employees, through: :owner
     has_many :inventories

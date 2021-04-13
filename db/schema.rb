@@ -10,24 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_000501) do
+ActiveRecord::Schema.define(version: 2021_04_13_114308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "actions", force: :cascade do |t|
-    t.string "name"
-    t.text "notes"
-    t.datetime "ordered"
-    t.integer "ordered_by"
-    t.datetime "completed"
-    t.integer "completed_by"
-    t.integer "lot_id"
-    t.integer "tank_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "status"
-  end
 
   create_table "employees", force: :cascade do |t|
     t.string "username"
@@ -42,8 +28,10 @@ ActiveRecord::Schema.define(version: 2021_04_13_000501) do
     t.string "format"
     t.integer "quantity"
     t.integer "lot_id"
+    t.bigint "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_id"], name: "index_inventories_on_owner_id"
   end
 
   create_table "lot_tanks", force: :cascade do |t|
@@ -62,9 +50,9 @@ ActiveRecord::Schema.define(version: 2021_04_13_000501) do
     t.integer "vintage"
     t.text "status"
     t.string "color"
+    t.bigint "owner_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "owner_id", null: false
     t.index ["owner_id"], name: "index_lots_on_owner_id"
   end
 
@@ -72,8 +60,17 @@ ActiveRecord::Schema.define(version: 2021_04_13_000501) do
     t.string "username"
     t.string "password_digest"
     t.string "email"
+    t.string "winery_name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "sections", force: :cascade do |t|
+    t.string "name"
+    t.bigint "owner_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["owner_id"], name: "index_sections_on_owner_id"
   end
 
   create_table "tanks", force: :cascade do |t|
@@ -82,26 +79,32 @@ ActiveRecord::Schema.define(version: 2021_04_13_000501) do
     t.text "status"
     t.integer "xaxis"
     t.integer "yaxis"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.bigint "winery_id", null: false
-    t.integer "volume"
     t.integer "width"
     t.integer "height"
-    t.index ["winery_id"], name: "index_tanks_on_winery_id"
-  end
-
-  create_table "wineries", force: :cascade do |t|
-    t.string "name"
+    t.integer "volume"
+    t.bigint "section_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "owner_id", null: false
-    t.index ["owner_id"], name: "index_wineries_on_owner_id"
+    t.index ["section_id"], name: "index_tanks_on_section_id"
   end
 
+  create_table "work_orders", force: :cascade do |t|
+    t.string "type"
+    t.text "notes"
+    t.string "status"
+    t.bigint "lot_id", null: false
+    t.integer "tank_id"
+    t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["lot_id"], name: "index_work_orders_on_lot_id"
+  end
+
+  add_foreign_key "inventories", "owners"
   add_foreign_key "lot_tanks", "lots"
   add_foreign_key "lot_tanks", "tanks"
   add_foreign_key "lots", "owners"
-  add_foreign_key "tanks", "wineries"
-  add_foreign_key "wineries", "owners"
+  add_foreign_key "sections", "owners"
+  add_foreign_key "tanks", "sections"
+  add_foreign_key "work_orders", "lots"
 end

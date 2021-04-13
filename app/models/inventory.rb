@@ -1,3 +1,3 @@
 class Inventory < ApplicationRecord
-    belongs_to :winery
+    belongs_to :section
 end

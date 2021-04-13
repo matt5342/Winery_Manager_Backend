@@ -1,4 +1,4 @@
 class Employee < ApplicationRecord
     belongs_to :owner
-    has_many :wineries, through: :owner
+    has_many :sections, through: :owner
 end

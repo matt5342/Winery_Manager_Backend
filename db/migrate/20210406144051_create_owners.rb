@@ -4,6 +4,7 @@ class CreateOwners < ActiveRecord::Migration[6.1]
       t.string :username
       t.string :password_digest
       t.string :email
+      t.string :winery_name
 
       t.timestamps
     end

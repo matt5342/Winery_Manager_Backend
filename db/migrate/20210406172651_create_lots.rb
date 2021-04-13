@@ -6,6 +6,7 @@ class CreateLots < ActiveRecord::Migration[6.1]
       t.integer :vintage
       t.text :status
       t.string :color
+      t.references :owner, null: false, foreign_key: true
 
       t.timestamps
     end
