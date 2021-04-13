@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   post '/lots/:tank_id', to: 'lots#create'
   patch '/lots/:id/tanks/:tank_id', to: 'lots#move_lot'
 
+  post '/actions/', to: 'actions#create'
+  get '/actions', to: 'actions#index'
+
   post '/login', to: 'auth#create'
   get '/login', to: 'owners#token_authenticate'
   # post '/profile', to: 'users#profile'

@@ -1,7 +1,7 @@
 class LotsController < ApplicationController
 
     def create
-        byebug
+        # byebug
         @lot = Lot.new(lot_params)
         @lot.owner = current_user
         @lot.save
