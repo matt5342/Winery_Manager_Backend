@@ -6,8 +6,9 @@ Rails.application.routes.draw do
   
   post '/section/:id/new_tank', to: 'tanks#create'
   get '/section/:id/tanks', to: 'tanks#these_tanks'
-  patch '/section/:id/tanks/:tank_id', to: 'tanks#this_tank'
+  patch '/section/:id/tanks/:tank_id', to: 'tanks#edit_tank'
   get '/tanks', to: 'tanks#index'
+  get '/tank/:id', to: 'tanks#this_tank'
 
   get '/lot/:id', to: 'lots#this_lot'
   # get '/section/:id/lots', to: 'lots#these_lots'

@@ -1,8 +1,12 @@
 class TanksController < ApplicationController
 
     def index
-        @tanks = current_user.tanks
-        render json: @tanks, adapter: nil
+        tanks = current_user.tanks
+        tank_array = []
+        tanks.each do |tank|
+            tank_array.push(tank_with_lot_info(tank))
+        end
+        render json: tank_array, adapter: nil
     end
     def create
         # byebug
@@ -28,6 +32,12 @@ class TanksController < ApplicationController
     end
 
     def this_tank
+        tank = Tank.find_by(id: params[:id])
+        tank_with_lot = tank_with_lot_info(tank)
+        render json: tank_with_lot, adapter: nil
+    end
+
+    def edit_tank
         current_section = Section.find_by(id: params[:id])
         current_tank = Tank.find_by(id: params["tank_id"])
         current_tank.xaxis = params["tank"]["xaxis"]
@@ -38,7 +48,7 @@ class TanksController < ApplicationController
     end
 
     def tank_with_lot_info(tank)
-        # byebug
+        # adds lots in tank and all work orders from those lots
         tank_with_lots = {}
         tank_with_lots[:id] = tank.id
         tank_with_lots[:name] = tank.name
@@ -51,6 +61,18 @@ class TanksController < ApplicationController
         tank_with_lots[:width] = tank.width
         tank_with_lots[:height] = tank.height
         tank_with_lots[:lots] = tank.lots
+
+        if tank_with_lots[:lots].length > 0
+            tank_with_lots[:lots].each do |lot|
+                if lot.work_orders.length > 0
+                    work_order_array = []
+                    lot.work_orders.each do |work_order|
+                        work_order_array.push(work_order)
+                    end
+                    tank_with_lots[:work_orders] = work_order_array
+                end
+            end
+        end
         return tank_with_lots
     end
 
