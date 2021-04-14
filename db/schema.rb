@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_13_114308) do
+ActiveRecord::Schema.define(version: 2021_04_14_133322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,14 +89,16 @@ ActiveRecord::Schema.define(version: 2021_04_13_114308) do
   end
 
   create_table "work_orders", force: :cascade do |t|
-    t.string "type"
+    t.string "name"
     t.text "notes"
     t.string "status"
     t.bigint "lot_id", null: false
-    t.integer "tank_id"
+    t.string "out_tank"
     t.integer "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "in_tank"
+    t.integer "completer_user_id"
     t.index ["lot_id"], name: "index_work_orders_on_lot_id"
   end
 

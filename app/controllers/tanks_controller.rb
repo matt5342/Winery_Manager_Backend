@@ -1,14 +1,17 @@
 class TanksController < ApplicationController
 
+    def index
+        @tanks = current_user.tanks
+        render json: @tanks, adapter: nil
+    end
     def create
         # byebug
         @tank = Tank.new(tank_params)
         @tank.section = Section.find_by(id: params[:id])
         @tank.save
-
         render json: @tank
-
     end
+    
 
     def these_tanks
         # byebug
