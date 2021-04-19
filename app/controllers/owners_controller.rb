@@ -8,7 +8,8 @@ class OwnersController < ApplicationController
             @token = encode_token(user_id: @owner.id)
             render json: { user: @owner, jwt: @token }, status: :created 
         else
-            render json: { error: 'failed to create user'}, status: :not_acceptable
+            # byebug
+            render json: @owner.errors, status: :not_acceptable
         end
     end
 

@@ -9,11 +9,15 @@ class TanksController < ApplicationController
         render json: tank_array, adapter: nil
     end
     def create
-        # byebug
         @tank = Tank.new(tank_params)
         @tank.section = Section.find_by(id: params[:id])
-        @tank.save
-        render json: @tank
+        if @tank.valid? 
+            render json: @tank
+            @tank.save
+        else
+            render json: @tank.errors, status: :not_acceptable
+        end
+        # byebug
     end
     
 
@@ -25,7 +29,7 @@ class TanksController < ApplicationController
             current_section.tanks.each do |tank|
                 tank_array.push(tank_with_lot_info(tank))
             end
-            render json: tank_array
+            render json: tank_array, adapter: nil
         else
             render json: {error: "no tanks yet"}
         end
@@ -60,10 +64,20 @@ class TanksController < ApplicationController
         tank_with_lots[:volume] = tank.volume
         tank_with_lots[:width] = tank.width
         tank_with_lots[:height] = tank.height
-        tank_with_lots[:lots] = tank.lots
-
+        tank_with_lots[:lots] = tank.lots #adds array to tank_with_lots to avoid issues with empy tank
+        if tank.lot_tanks
+            # byebug
+            lot_array = []
+            tank.lot_tanks.each do |lot_tank|
+                if lot_tank.volume > 0
+                    lot_array.push(Lot.find_by(id: lot_tank.lot_id))
+                end
+            end
+            tank_with_lots[:lots] = lot_array #only includes lots where lot_tank volume is > 0
+        end
         if tank_with_lots[:lots].length > 0
             tank_with_lots[:lots].each do |lot|
+                # byebug
                 if lot.work_orders.length > 0
                     work_order_array = []
                     lot.work_orders.each do |work_order|
