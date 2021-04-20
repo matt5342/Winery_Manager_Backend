@@ -4,7 +4,6 @@ class WorkOrdersController < ApplicationController
         render json: @work_orders, adapter: nil
     end
     def create
-
         @work_order = WorkOrder.new(work_order_params)
         @work_order.user_id = current_user.id
         if work_order_params["name"] == "Rack"
@@ -16,6 +15,7 @@ class WorkOrdersController < ApplicationController
                     .find{|tank| tank.section.owner === current_user}
             in_tank_vol = 0
             out_tank_vol = 0
+            current_tank_vol = 0
             # byebug
             if in_tank.lot_tanks && in_tank.lot_tanks.length > 0
                 in_tank.lot_tanks.each do |lot_tank|
@@ -65,14 +65,14 @@ class WorkOrdersController < ApplicationController
                 # byebug
                 @lot.save
                 @work_order.save
-                render json: @work_order
+                render json: @work_order, adapter: nil
             end
         elsif @work_order.name == "Addition"
             if @work_order.status == "Initialized"
                 @work_order.completer_user_id = current_user.id
                 @work_order.status = "Completed"
                 @work_order.save
-                render json: @work_order
+                render json: @work_order, adapter: nil
             end
         end
     end
