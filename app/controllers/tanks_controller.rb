@@ -6,6 +6,8 @@ class TanksController < ApplicationController
         tanks.each do |tank|
             tank_array.push(tank_with_lot_info(tank))
         end
+        #Splits numbers from letters and sorts by number, assumes that the tank names end with numbers!
+        tank_array = tank_array.sort_by{|tank| tank[:name].scan(/\d+|\D+/).last.to_i} 
         render json: tank_array, adapter: nil
     end
     def create
@@ -17,18 +19,18 @@ class TanksController < ApplicationController
         else
             render json: @tank.errors, status: :not_acceptable
         end
-        # byebug
     end
-    
 
     def these_tanks
-        # byebug
         current_section = Section.find_by(id: params[:id])
         if current_section.tanks.length > 0
             tank_array = []
             current_section.tanks.each do |tank|
                 tank_array.push(tank_with_lot_info(tank))
             end
+            #Splits numbers from letters and sorts by number, assumes that the tank names end with numbers!
+            tank_array = tank_array.sort_by{|tank| tank[:name].scan(/\d+|\D+/).last.to_i} 
+            # byebug
             render json: tank_array, adapter: nil
         else
             render json: {error: "no tanks yet"}
