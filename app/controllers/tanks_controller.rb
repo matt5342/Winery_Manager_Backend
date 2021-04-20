@@ -44,6 +44,7 @@ class TanksController < ApplicationController
     def edit_tank
         current_section = Section.find_by(id: params[:id])
         current_tank = Tank.find_by(id: params["tank_id"])
+        # byebug
         current_tank.xaxis = params["tank"]["xaxis"]
         current_tank.yaxis = params["tank"]["yaxis"]
         current_tank.width = params["tank"]["width"]
@@ -78,7 +79,7 @@ class TanksController < ApplicationController
         if tank_with_lots[:lots].length > 0
             tank_with_lots[:lots].each do |lot|
                 # byebug
-                if lot.work_orders.length > 0
+                if lot.work_orders && lot.work_orders.length > 0
                     work_order_array = []
                     lot.work_orders.each do |work_order|
                         work_order_array.push(work_order)
