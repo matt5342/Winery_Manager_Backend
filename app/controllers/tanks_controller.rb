@@ -1,4 +1,5 @@
 class TanksController < ApplicationController
+    skip_before_action :authorized, only: [:create]
 
     def index
         tanks = current_user.tanks
