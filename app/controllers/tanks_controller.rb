@@ -1,5 +1,5 @@
 class TanksController < ApplicationController
-    skip_before_action :authorized, only: [:index]
+    # skip_before_action :authorized, only: [:index]
 
     def index
         tanks = current_user.tanks
@@ -11,6 +11,7 @@ class TanksController < ApplicationController
         tank_array = tank_array.sort_by{|tank| tank[:name].scan(/\d+|\D+/).last.to_i} 
         render json: tank_array, adapter: nil
     end
+    
     def create
         @tank = Tank.new(tank_params)
         @tank.section = Section.find_by(id: params[:id])
